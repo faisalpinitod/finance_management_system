@@ -28,7 +28,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 
   try {
     const category = await prisma.category.update({
-      where: { id: parseInt(id) },
+      where: { id },
       data: { name },
     });
     res.status(200).json(category);
@@ -42,7 +42,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 
   try {
     await prisma.category.delete({
-      where: { id: parseInt(id) },
+      where: { id },
     });
     res.status(204).json({ message: 'Category deleted' });
   } catch (error) {

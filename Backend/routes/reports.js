@@ -12,7 +12,7 @@ router.get('/monthly', verifyToken, async (req, res) => {
     const transactions = await prisma.transaction.findMany({
       where: {
         userId,
-        createdAt: {
+        date: {
           gte: new Date(`${year}-${month}-01`),
           lt: new Date(`${year}-${parseInt(month) + 1}-01`),
         },

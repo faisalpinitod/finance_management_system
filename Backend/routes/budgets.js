@@ -5,12 +5,12 @@ const router = express.Router();
 const { verifyToken } = require('../middlewares/authMiddleware');
 
 router.post('/', verifyToken, async (req, res) => {
-  const { amount, startDate, endDate } = req.body;
+  const { amount, categoryId } = req.body;
   const userId = req.userId;
 
   try {
     const budget = await prisma.budget.create({
-      data: { amount, startDate, endDate, userId },
+      data: { amount, categoryId, userId },
     });
     res.status(201).json(budget);
   } catch (error) {
@@ -27,13 +27,13 @@ router.get('/', verifyToken, async (req, res) => {
 
 router.put('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
-  const { amount, startDate, endDate } = req.body;
+  const { amount, categoryId } = req.body;
   const userId = req.userId;
 
   try {
-    const budget = await prisma.budget.update({
-      where: { id: parseInt(id), userId },
-      data: { amount, startDate, endDate },
+    const budget = await prisma.budget.updateMany({
+      where: { id, userId },
+      data: { amount, categoryId },
     });
     res.status(200).json(budget);
   } catch (error) {
@@ -46,8 +46,8 @@ router.delete('/:id', verifyToken, async (req, res) => {
   const userId = req.userId;
 
   try {
-    await prisma.budget.delete({
-      where: { id: parseInt(id), userId },
+    await prisma.budget.deleteMany({
+      where: { id, userId },
     });
     res.status(204).json({ message: 'Budget deleted' });
   } catch (error) {
